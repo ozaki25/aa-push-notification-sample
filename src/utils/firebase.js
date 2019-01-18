@@ -36,13 +36,6 @@ const params = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
-    const messaging = app.messaging();
-    messaging.onMessage(function(payload) {
-      const {
-        notification: { title, body, icon },
-      } = payload;
-      new window.Notification(title, { body, icon });
-    });
   }
 
   askForPermissionToReceiveNotifications = async () => {
