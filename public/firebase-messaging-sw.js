@@ -6,3 +6,10 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+
+self.addEventListener('push', event => {
+  const {
+    notification: { title, body, icon },
+  } = event.data.json();
+  self.registration.showNotification(title, { icon, body });
+});
