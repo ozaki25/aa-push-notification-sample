@@ -11,11 +11,26 @@ const serverKey = process.env.REACT_APP_SERVER_KEY;
 
 const topicName = 'aa-sample';
 
-const subscribeUrl = token => `https://iid.googleapis.com/iid/v1/${token}/rel/topics/${topicName}`;
+const url = {
+  subscribe(token) {
+    return `https://iid.googleapis.com/iid/v1/${token}/rel/topics/${topicName}`;
+  },
+  publish: 'https://fcm.googleapis.com/fcm/send',
+};
 
 const headers = {
   'Content-Type': 'application/json',
   Authorization: `key=${serverKey}`,
+};
+
+const params = {
+  to: `/topics/${topicName}`,
+  notification: {
+    title: 'Webプッシュ通知',
+    body: 'Webアプリでプッシュ通知を送信できました！',
+    icon:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1024px-React-icon.svg.png',
+  },
 };
 
 class Firebase {
@@ -29,7 +44,10 @@ class Firebase {
     return messaging.getToken();
   };
 
-  subscribeNotification = ({ token }) => fetch(subscribeUrl(token), { headers, method: 'post' });
+  subscribeNotification = ({ token }) => fetch(url.subscribe(token), { headers, method: 'post' });
+
+  publishNotification = () =>
+    fetch(url.publish, { headers, body: JSON.stringify(params), method: 'post' });
 }
 
 export default Firebase;
