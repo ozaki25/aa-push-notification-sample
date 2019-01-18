@@ -4,9 +4,12 @@ import withFirebase from '../hoc/withFirebase';
 const subscibe = async firebase => {
   try {
     const token = await firebase.askForPermissionToReceiveNotifications();
-    console.log(token);
+    const { status } = await firebase.subscribeNotification({ token });
+    console.log(status);
+    alert(status);
   } catch (e) {
     console.log(e);
+    alert(e.toString());
   }
 };
 
